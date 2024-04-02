@@ -6,13 +6,24 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cs230.ci.entities.User;
+import cs230.ci.mocks.MockDatabaseController;
 
 public class SystemControllerTest {
 	private static User testUser = new User("peter12344321", "secure", "Peter", "Ohmann");
 	private static User testUser2 = new User("anotheruser555", "morepass", "Another", "Person");
 
+	// the class to use as a database controller...for mocks!
+	private Class<? extends DatabaseController> DBClass = DatabaseController.class;
+
+	private void switchToMock() {
+		DBClass = MockDatabaseController.class;
+		SystemController.mockEnable();
+	}
+
 	@Before
 	public void setUp() throws Exception {
+		//switchToMock();
+		//DBClass.newInstance().addUser(testUser);
 		DatabaseController.addUser(testUser);
 	}
 
@@ -27,11 +38,11 @@ public class SystemControllerTest {
 		// test bad username (EC 1)
 		User result = SystemController.login("peter98766789", "secure");
 		Assert.assertNull(result);
-		
+
 		// test good username, bad password (EC 2)
 		result = SystemController.login("peter12344321", "wrongpass");
 		Assert.assertNull(result);
-		
+
 		// test good username and password (EC 3)
 		// NOTE: assertion here is arbitrary, ensuring that we get back the right data
 		result = SystemController.login("peter12344321", "secure");
@@ -42,10 +53,10 @@ public class SystemControllerTest {
 	public void testGetAllUsers() {
 		// get original # of users in the DB
 		int precount = DatabaseController.getAllUsers().size();
-		
+
 		// add another one
 		DatabaseController.addUser(testUser2);
-		
+
 		// make sure the # of users went up by 1!
 		int postcount = DatabaseController.getAllUsers().size();
 		Assert.assertEquals(precount+1, postcount);
