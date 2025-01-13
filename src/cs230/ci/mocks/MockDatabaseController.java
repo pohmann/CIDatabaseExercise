@@ -11,7 +11,7 @@ import cs230.ci.entities.User;
 public class MockDatabaseController extends DatabaseController {
 
 	// add a user to the db
-	public static boolean addUser(User theUser) {
+	public boolean addUser(User theUser) {
 		// what should this do?
 		return false;
 	}

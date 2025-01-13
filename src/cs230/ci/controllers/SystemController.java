@@ -12,11 +12,29 @@ import cs230.ci.entities.User;
  * @author Peter Ohmann
  */
 public class SystemController {
-	private static boolean useMock = false;
+	private DatabaseController myDBController;
 	
-	// other classes should *not* instantiate this class.  It is "pure static".
-	private SystemController() throws Exception {
-		throw new Exception("Attempt to instantiate a SystemController");
+	/**
+	 * Construct a SystemController using the basic (no parameter)
+	 * DatabaseController as the underlying database access.
+	 */
+	public SystemController() {
+		this.myDBController = new DatabaseController();
+	}
+	
+	/**
+	 * Inject a compatible DatabaseController object (generally a sub-class
+	 * designed to be used as a mock) in place of the underlying
+	 * DatabaseController object.  This method should only be used for testing
+	 * in environments where access to the actual database is impossible
+	 * (like a remote integration testing server).
+	 * 
+	 * @param newDBC the mocked DatabaseController object
+	 */
+	public void injectMock(DatabaseController newDBC) {
+		// TODO: How could we make this particular SystemController use newDBC
+		//       (presumably a mock) rather than the actual database?
+		// HINT: You only need one (very simple!) line here!
 	}
 	
 	/**
@@ -28,8 +46,8 @@ public class SystemController {
 	 * @return the matching User object if the username and password match
 	 * a database entry, or null otherwise
 	 */
-	public static User login(String username, String password) {
-		User theUser = DatabaseController.getUser(username);
+	public User login(String username, String password) {
+		User theUser = this.myDBController.getUser(username);
 		if (theUser == null)
 			return null;
 		
@@ -46,8 +64,8 @@ public class SystemController {
 	 * 
 	 * @return the list of users
 	 */
-	public static List<User> getAllUsers() {
-		List<User> usersList = DatabaseController.getAllUsers();
+	public List<User> getAllUsers() {
+		List<User> usersList = this.myDBController.getAllUsers();
 		return usersList;
 	}
 	
@@ -61,9 +79,9 @@ public class SystemController {
 	 * @return true if the user is successfully stored, or false on database error
 	 * or if the username is not unique
 	 */
-	public static boolean addUser(String username, String password,
+	public boolean addUser(String username, String password,
 			String firstName, String lastName) {
-		return DatabaseController.addUser(new User(username, password, firstName, lastName));
+		return this.myDBController.addUser(new User(username, password, firstName, lastName));
 	}
 	
 	/**
@@ -73,25 +91,8 @@ public class SystemController {
 	 * @return true if the user is successfully removed, or false on database error
 	 * or if the username does not exist
 	 */
-	public static boolean removeUser(String username) {
-		return DatabaseController.removeUser(username);
-	}
-	
-	/**
-	 * This method switches the SystemController to use the "mock" database,
-	 * rather than the real one.  Of course, it doesn't do anything...yet!
-	 */
-	public static void mockEnable() {
-		// TODO: Switch to using the MockDatabaseController!
-		useMock = true;
-	}
-	
-	/**
-	 * This method switches the SystemController back to using the "regular"
-	 * database!
-	 */
-	public static void mockDisable() {
-		useMock = false;
+	public boolean removeUser(String username) {
+		return this.myDBController.removeUser(username);
 	}
 
 }

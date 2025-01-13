@@ -14,27 +14,35 @@ import dblibrary.project.csci230.*;
  * @author Peter Ohmann
  */
 public class DatabaseController {
-	// TODO: fill in your team's database info!
-	private static UniversityDBLibrary database = new UniversityDBLibrary("csci230", "csci230");
+	private UniversityDBLibrary database;
+
+	/**
+	 * The default constructor that connects to the underlying
+	 * UniversityDBLibrary object using your team's info.
+	 */
+	public DatabaseController() {
+		// TODO: fill in your team's database info!
+		this.database = new UniversityDBLibrary("csci230", "csci230");
+	}
 
 	// add a user to the db
-	public static boolean addUser(User theUser) {
-		int result = database.user_addUser(theUser.getFirstName(), theUser.getLastName(),
+	public boolean addUser(User theUser) {
+		int result = this.database.user_addUser(theUser.getFirstName(), theUser.getLastName(),
 				theUser.getUsername(), theUser.getPassword(), 'u');
 
 		return result != -1;
 	}
 
 	// remove a user from the db
-	public static boolean removeUser(String username) {
-		int result = database.user_deleteUser(username);
+	public boolean removeUser(String username) {
+		int result = this.database.user_deleteUser(username);
 
 		return result != -1;
 	}
 
 	// get a user; null if not in DB
-	public static User getUser(String username) {
-		String[][] databaseUserStrings = database.user_getUsers();
+	public User getUser(String username) {
+		String[][] databaseUserStrings = this.database.user_getUsers();
 
 		for (String[] singleUser : databaseUserStrings) {
 			String thisUsername = singleUser[2];
@@ -47,8 +55,8 @@ public class DatabaseController {
 	}
 
 	// get the list of all the users in the DB
-	public static List<User> getAllUsers() {
-		String[][] dbUserList = database.user_getUsers();
+	public List<User> getAllUsers() {
+		String[][] dbUserList = this.database.user_getUsers();
 
 		ArrayList<User> result = new ArrayList<User>();
 		for (String[] user : dbUserList) {
