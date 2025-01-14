@@ -22,7 +22,7 @@ public class DatabaseController {
 	 */
 	public DatabaseController() {
 		// TODO: fill in your team's database info!
-		this.database = new UniversityDBLibrary("csci230", "csci230");
+		this.database = new UniversityDBLibrary("csci230", "Csci230$");
 	}
 
 	// add a user to the db
